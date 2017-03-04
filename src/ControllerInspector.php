@@ -2,6 +2,7 @@
 namespace Mexcoder\Routing;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionParameter;
 use Illuminate\Support\Str;
 
 
@@ -23,7 +24,7 @@ class ControllerInspector
      * @param  string  $prefix
      * @return array
      */
-    public function getRoutable($controller, $prefix)
+    public function getRoutable($controller, $prefix, $wildcards = true)
     {
         $routable = [];
         $reflection = new ReflectionClass($controller);
@@ -33,7 +34,7 @@ class ControllerInspector
         // is a publicly routable method. If so, we will add it to this listings.
         foreach ($methods as $method) {
             if ($this->isRoutable($method)) {
-                $data = $this->getMethodData($method, $prefix);
+                $data = $this->getMethodData($method, $prefix, $wildcards);
                 $routable[$method->name][] = $data;
                 // If the routable method is an index method, we will create a special index
                 // route which is simply the prefix and the verb and does not contain any
@@ -57,7 +58,8 @@ class ControllerInspector
             return false;
         }
         return Str::startsWith($method->name, $this->verbs);
-    }
+    } 
+
     /**
      * Get the method data for a given method.
      *
@@ -65,11 +67,15 @@ class ControllerInspector
      * @param  string  $prefix
      * @return array
      */
-    public function getMethodData(ReflectionMethod $method, $prefix)
+    public function getMethodData(ReflectionMethod $method, $prefix, $wildcards = true)
     {
         $verb = $this->getVerb($name = $method->name);
-        $uri = $this->addUriWildcards($plain = $this->getPlainUri($name, $prefix));
-        return compact('verb', 'plain', 'uri');
+        $plain = $this->getPlainUri($name, $prefix);
+        $parameters = $this->getParameterString($method,$wildcards);
+        $uri = $plain.$parameters;
+        $name = lcfirst(str_replace($this->verbs, "", $method->name));
+        
+        return compact('verb', 'plain', 'parameters', 'uri','name');
     }
     /**
      * Get the routable data for an index method.
@@ -80,7 +86,10 @@ class ControllerInspector
      */
     protected function getIndexData($data, $prefix)
     {
-        return ['verb' => $data['verb'], 'plain' => $prefix, 'uri' => $prefix];
+        return ['verb' => $data['verb'],
+                'plain' => $prefix, 
+                'uri' =>  $prefix.$data["parameters"], 
+                'name' => 'index'];
     }
     /**
      * Extract the verb from a controller action.
@@ -112,5 +121,31 @@ class ControllerInspector
     public function addUriWildcards($uri)
     {
         return $uri.'/{one?}/{two?}/{three?}/{four?}/{five?}';
+    }
+    /**
+    *   extracted from lesichkovm/laravel-advanced-route
+    **/
+    public function getParameterString(ReflectionMethod $method,$wildcards = true){
+        $params = "";
+        foreach ($method->getParameters() as $parameter) {
+            if (self::hasType($parameter)) {
+                continue;
+            }
+            $params .= sprintf('/{%s%s}', strtolower($parameter->getName()), $parameter->isDefaultValueAvailable() ? '?' : '');
+        }
+
+        if($params == null && $wildcards)
+           return $this->addUriWildcards("");
+        return $params;
+    }
+
+    public function addParameterString($uri, ReflectionMethod $method,$wildcards = true){
+       return $uri.$this->getParameterString($method,$wildcards);
+    }
+
+    protected static function hasType(ReflectionParameter $param) {
+        //TODO: if php7 use the native method
+        preg_match('/\[\s\<\w+?>\s([\w]+)/s', $param->__toString(), $matches);
+        return isset($matches[1]) ? true : false;
     }
 }

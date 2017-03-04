@@ -1,10 +1,11 @@
 <?php
 namespace Mexcoder\Routing;
 
+use Illuminate\Support\Arr;
 
-class Router extends Illuminate\Router
+
+class Router extends \Illuminate\Routing\Router
 {
-
     /**
      * Register an array of controllers with wildcard routing.
      *
@@ -27,7 +28,7 @@ class Router extends Illuminate\Router
      * @return void
      *
      */
-    public function controller($uri, $controller, $names = [])
+    public function controller($uri, $controller, $names = [], $wildCards = true )
     {
         $prepended = $controller;
         // First, we will check to see if a controller prefix has been registered in
@@ -37,7 +38,7 @@ class Router extends Illuminate\Router
             $prepended = $this->prependGroupUses($controller);
         }
         $routable = (new ControllerInspector)
-                            ->getRoutable($prepended, $uri);
+                            ->getRoutable($prepended, $uri, $wildCards);
         // When a controller is routed using this method, we use Reflection to parse
         // out all of the routable methods for the controller, then register each
         // route explicitly for the developers, so reverse routing is possible.
@@ -64,7 +65,7 @@ class Router extends Illuminate\Router
         // If a given controller method has been named, we will assign the name to the
         // controller action array, which provides for a short-cut to method naming
         // so you don't have to define an individual route for these controllers.
-        $action['as'] = Arr::get($names, $method);
+        $action['as'] = is_string($names)? "{$names}.{$route['name']}" :  Arr::get($names, $method);
         $this->{$route['verb']}($route['uri'], $action);
     }
     /**
@@ -80,5 +81,17 @@ class Router extends Illuminate\Router
         $missing = $this->any($uri.'/{_missing}', $controller.'@missingMethod');
         $missing->where('_missing', '(.*)');
     }
+
+    /**
+     * Prepend the last group uses onto the use clause.
+     *
+     * @param  string  $uses
+     * @return string
+     */
+    protected function prependGroupUses($uses)
+    {
+        $group = end($this->groupStack);
+        return isset($group['namespace']) && strpos($uses, '\\') !== 0 ? $group['namespace'].'\\'.$uses : $uses;
+    }   
 
 }
