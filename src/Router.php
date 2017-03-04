@@ -28,7 +28,7 @@ class Router extends \Illuminate\Routing\Router
      * @return void
      *
      */
-    public function controller($uri, $controller, $names = [], $wildCards = true )
+    public function controller($uri, $controller, $names = [], $options = [] )
     {
         $prepended = $controller;
         // First, we will check to see if a controller prefix has been registered in
@@ -38,7 +38,7 @@ class Router extends \Illuminate\Routing\Router
             $prepended = $this->prependGroupUses($controller);
         }
         $routable = (new ControllerInspector)
-                            ->getRoutable($prepended, $uri, $wildCards);
+                            ->getRoutable($prepended, $uri, $options);
         // When a controller is routed using this method, we use Reflection to parse
         // out all of the routable methods for the controller, then register each
         // route explicitly for the developers, so reverse routing is possible.

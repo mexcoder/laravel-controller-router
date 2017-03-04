@@ -24,7 +24,7 @@ class ControllerInspector
      * @param  string  $prefix
      * @return array
      */
-    public function getRoutable($controller, $prefix, $wildcards = true)
+    public function getRoutable($controller, $prefix, $options = [])
     {
         $routable = [];
         $reflection = new ReflectionClass($controller);
@@ -34,7 +34,7 @@ class ControllerInspector
         // is a publicly routable method. If so, we will add it to this listings.
         foreach ($methods as $method) {
             if ($this->isRoutable($method)) {
-                $data = $this->getMethodData($method, $prefix, $wildcards);
+                $data = $this->getMethodData($method, $prefix, $options);
                 $routable[$method->name][] = $data;
                 // If the routable method is an index method, we will create a special index
                 // route which is simply the prefix and the verb and does not contain any
@@ -67,11 +67,12 @@ class ControllerInspector
      * @param  string  $prefix
      * @return array
      */
-    public function getMethodData(ReflectionMethod $method, $prefix, $wildcards = true)
+    public function getMethodData(ReflectionMethod $method, $prefix, $options = [])
     {
+        $wildcards = Arr::get($options,"wildCards",false);
         $verb = $this->getVerb($name = $method->name);
         $plain = $this->getPlainUri($name, $prefix);
-        $parameters = $this->getParameterString($method,$wildcards);
+        $parameters = $this->getParameterString($method, $wildcards);
         $uri = $plain.$parameters;
         $name = lcfirst(str_replace($this->verbs, "", $method->name));
         
