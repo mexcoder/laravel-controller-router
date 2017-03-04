@@ -1,0 +1,26 @@
+{
+    "name": "mexcoder/laravel-controller-route",
+    "description": "A router that extends laravel default router adding the old Controller method",
+    "keywords": ["laravel", "routes"],
+    "homepage": "mexcoder.com",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/mexcoder/laravel-controller-route/issues",
+        "source": "https://github.com/mexcoder/laravel-controller-route"
+    },
+    "authors": [
+        {
+            "name": "Juan Antonio Orozco Bianchi",
+            "email": "iam@mexcoder.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "illuminate/routing": "^5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mexcoder\\Routing\\": "src"
+        }
+    }
+}
