@@ -1,12 +1,12 @@
 {
-    "name": "mexcoder/laravel-controller-route",
-    "description": "A router that extends laravel default router adding the old Controller method",
+    "name": "mexcoder/laravel-controller-router",
+    "description": "A router that extends laravel default router adding the old Controller & controllers method deprecated on laravel/framework 5.2 and removed on",
     "keywords": ["laravel", "routes"],
     "homepage": "mexcoder.com",
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/mexcoder/laravel-controller-route/issues",
-        "source": "https://github.com/mexcoder/laravel-controller-route"
+        "issues": "https://github.com/mexcoder/laravel-controller-router/issues",
+        "source": "https://github.com/mexcoder/laravel-controller-router"
     },
     "authors": [
         {
