@@ -70,7 +70,7 @@ class ControllerInspector
      */
     public function getMethodData(ReflectionMethod $method, $prefix, $options = [])
     {
-        $wildcards = Arr::get($options,"wildCards",false);
+        $wildcards = Arr::get($options, "wildCards", true);
         $verb = $this->getVerb($name = $method->name);
         $plain = $this->getPlainUri($name, $prefix);
         $parameters = $this->getParameterString($method, $wildcards);
