@@ -4,6 +4,7 @@ use ReflectionClass;
 use ReflectionMethod;
 use ReflectionParameter;
 use Illuminate\Support\Str;
+use Illuminate\Support\Arr;
 
 
 class ControllerInspector
