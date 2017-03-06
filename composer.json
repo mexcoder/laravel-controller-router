@@ -1,6 +1,6 @@
 {
     "name": "mexcoder/laravel-controller-router",
-    "description": "A router that extends laravel default router adding the old Controller & controllers method deprecated on laravel/framework 5.2 and removed on",
+    "description": "A router that extends laravel default router adding the old Controller & controllers methods deprecated on laravel/framework 5.2 and removed",
     "keywords": ["laravel", "routes"],
     "homepage": "mexcoder.com",
     "license": "MIT",
