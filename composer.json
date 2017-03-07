@@ -1,6 +1,6 @@
 {
     "name": "mexcoder/laravel-controller-router",
-    "description": "A router that extends laravel default router adding the old Controller & controllers methods deprecated on laravel/framework 5.2 and removed",
+    "description": "Vainilla Laravel 5.2 router for Laravel 5.3+ (adds the Controller & Controllers function removed on Laravel 5.3)",
     "keywords": ["laravel", "routes"],
     "homepage": "mexcoder.com",
     "license": "MIT",
