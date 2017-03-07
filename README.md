@@ -38,4 +38,4 @@ return $app;
 ```
 
 # Alternatives
-Dont like messing with the laravel router? thats fine try [AdvancedRoute from Milan Lesichkov](https://github.com/lesichkovm/laravel-advanced-route), great package :simple_smile:
+Dont like messing with the laravel router? thats fine try [AdvancedRoute from Milan Lesichkov](https://github.com/lesichkovm/laravel-advanced-route), great package :smiley:
