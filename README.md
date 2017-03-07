@@ -15,7 +15,7 @@ Add the following to your composer file:
     }
 ],
 "require": {
-    "mexcoder/laravel-controller-route": "dev-master"
+    "mexcoder/laravel-controller-route": "dev-vainilla"
 }
 ```
 
@@ -36,3 +36,6 @@ before the line
 ```php
 return $app;
 ```
+
+# Alternatives
+Dont like messing with the laravel router? thats fine try [AdvancedRoute from Milan Lesichkov](https://github.com/lesichkovm/laravel-advanced-route), great package :simple_smile:
